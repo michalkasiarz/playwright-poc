@@ -1,4 +1,4 @@
-import { chromium, PlaywrightTestConfig } from '@playwright/test'
+import { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
   timeout: 60000,
@@ -24,6 +24,10 @@ const config: PlaywrightTestConfig = {
       name: 'Webkit',
       use: { browserName: 'webkit' },
     },
+  ],
+  reporter: [
+    ['list'], // Default console output
+    ['json', { outputFile: 'test-results/test-results.json' }],
   ],
 }
 

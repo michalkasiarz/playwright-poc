@@ -26,6 +26,10 @@ const config: PlaywrightTestConfig = {
       use: { browserName: 'webkit' },
     },
   ],
+  reporter: [
+    ['list'], // Default console output
+    ['json', { outputFile: 'test-results/e2e-results.json' }],
+  ],
 }
 
 export default config

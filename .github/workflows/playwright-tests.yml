@@ -1,0 +1,49 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright dependencies
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test --config=e2e.config.ts
+        continue-on-error: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-test-results
+          path: test-results/
+
+      - name: Post test results as a comment
+        uses: daun/playwright-report-summary@v3
+        if: always() # Ensures this runs even if tests fail
+        with:
+          report-file: test-results/e2e-results.json
+          test-summary: true
+#          fail-only: true
+          job-summary: true
